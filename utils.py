@@ -1,5 +1,4 @@
-from typing import Tuple, List, Dict
-import string, random
+from typing import Dict, List, Tuple
 
 
 def yaml_escape(s: str) -> str:
@@ -23,36 +22,6 @@ def minify_json(json: str) -> str:
     return ans
 
 
-# def dry_json(json: str) -> Tuple[str, Dict[str, str]]:
-#     def uuid(length=10) -> str:
-#         chars = string.ascii_letters + string.digits
-#         ans = "".join(random.choice(chars) for _ in range(length))
-#         return ans
-#     json = minify_json(json)
-#     d: Dict[str, str] = {}
-#     ans = "{"
-#     cur: str = ""
-#     in_string = False
-#     for i in range(1, len(json)):
-#         if json[i] == '"':
-#             if in_string:
-#                 if json[i - 1] == "\\":
-#                     cur += json[i]
-#                 else:
-#                     k = uuid(10)
-#                     assert k not in d
-#                     assert "null" not in d
-#                     ans += k
-#                     d[k] = cur
-#                     cur = ""
-#                     in_string = False
-#             else:
-#                 in_string = True
-#         elif in_string:
-#             cur += json[i]
-#         else:
-#             ans += json[i]
-#     return ans, d
 
 
 def dry_json(json: str, keyword="owo") -> Tuple[str, Dict[str, str], str]:
