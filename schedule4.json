@@ -1,0 +1,39 @@
+{
+  "student": "lavrent",
+  "group": "P3119",
+  "dayOfWeek": "saturday",
+  "classes": [
+    {
+      "startTime": "10:00",
+      "endTime": "11:30",
+      "room": "2337 ауд.",
+      "location": "Кронверкский пр., д.49, лит.А",
+      "className": "дискретная математика",
+      "type": "lecture"
+    },
+    {
+      "startTime": "11:40",
+      "endTime": "13:10",
+      "room": "2337 ауд.",
+      "location": "Кронверкский пр., д.49, лит.А",
+      "className": "дискретная математика",
+      "type": "practice"
+    },
+    {
+      "startTime": "13:30",
+      "endTime": "15:00",
+      "room": null,
+      "location": null,
+      "className": "история",
+      "type": "consult"
+    },
+    {
+      "startTime": "15:20",
+      "endTime": "16:50",
+      "room": null,
+      "location": null,
+      "className": "история",
+      "type": "consult"
+    }
+  ]
+}
