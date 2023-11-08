@@ -1,6 +1,6 @@
 import unittest
 import json
-from t3 import Parser
+from task3 import Parser
 
 
 class TestParser(unittest.TestCase):
