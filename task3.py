@@ -158,7 +158,9 @@ def obj_to_yaml(
     if isinstance(obj, dict):
         for key, value in obj.items():
             if isinstance(value, (dict, list)):
-                ans += f"{'' if skip_indent else indent_str * level}{yaml_escape(key)}:\n"
+                ans += (
+                    f"{'' if skip_indent else indent_str * level}{yaml_escape(key)}:\n"
+                )
                 ans += obj_to_yaml(value, level=level + 1)
             else:
                 ans += f"{'' if skip_indent else indent_str * level}{yaml_escape(key)}: {obj_to_yaml(value)}"

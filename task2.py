@@ -2,11 +2,11 @@ import re
 
 
 def get_indent(m: re.Match, json: str, indent: str):
-    k    = 0
+    k = 0
     for i in range(1, m.span()[1]):
-        if json[i] in '{[':
+        if json[i] in "{[":
             k += 1
-        elif json[i] in '}]':
+        elif json[i] in "}]":
             k -= 1
     return k * indent
 

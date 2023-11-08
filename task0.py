@@ -1,7 +1,6 @@
 from utils import dry_json, hydrate_json
 
 
-
 def json_to_yaml(json: str):
     json, d, keyword = dry_json(json)
     json = json.replace(",", "\n").replace("{", "").replace("}", "").replace(":", ": ")
