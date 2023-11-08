@@ -81,6 +81,34 @@ class TestParser(unittest.TestCase):
         """
         self.assertDictEqual(self.parser.parse(data), json.loads(data))
 
+    def test_invalid_1(self):
+        data = """
+        {
+            key: "value",
+            "anotherKey": "anotherValue"
+        }
+        """
+        self.assertRaises(ValueError, lambda: self.parser.parse(data))
+
+    def test_invalid_2(self):
+        data = """
+        {
+            "key": "value"
+            // This is a comment
+            "key2": "value2"
+        }
+        """
+        self.assertRaises(ValueError, lambda: self.parser.parse(data))
+
+    def test_invalid_3(self):
+        data = """
+        {
+            "array": [1, 2, 3,]
+        }
+
+        """
+        self.assertRaises(ValueError, lambda: self.parser.parse(data))
+
 
 if __name__ == "__main__":
     unittest.main()
