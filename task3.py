@@ -1,4 +1,3 @@
-from curses.ascii import isdigit
 from typing import List, Dict
 import re
 
@@ -9,7 +8,7 @@ class Parser:
         self.json = ""
         self.c = ""
 
-    def check_braces(self, s: str) -> bool:
+    def __check_braces(self, s: str) -> bool:
         in_string = False
         brace_pairs = {"{": "}", "[": "]", "(": ")"}
         stack: List[str] = []
@@ -30,13 +29,13 @@ class Parser:
         return len(stack) == 0
 
     def validate(self, json: str):
-        if not self.check_braces(json):
+        if not self.__check_braces(json):
             raise ValueError("incorrect braces")
 
-    def minify_json(self, json: str) -> str:
+    def __minify_json(self, json: str) -> str:
         return re.sub(r'(".*?")|[\n\t\s]', lambda m: m.group(1) or "", json)
 
-    def next(self):
+    def __next(self):
         self.i += 1
         if self.i == len(self.json):
             return None
@@ -45,98 +44,98 @@ class Parser:
         self.c = self.json[self.i]
         return self.c
 
-    def parse_bool(self) -> None | bool:
+    def __parse_bool(self) -> None | bool:
         ans = ""
         if self.c not in "ntf":
             raise ValueError()
         for _ in range({"n": 4, "t": 4, "f": 5}[self.c]):
             ans += self.c
-            self.next()
+            self.__next()
         if ans not in {"null", "true", "false"}:
             raise ValueError()
         return {"null": None, "true": True, "false": False}[ans]
 
-    def parse_number(self) -> int | float:
+    def __parse_number(self) -> int | float:
         ans = ""
 
         while self.c.isdigit() or self.c in "+-eE.":
             ans += self.c
-            self.next()
+            self.__next()
 
         if not re.match(r"(-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?)\s*(.*)", ans):
             raise ValueError("bad number")
         return float(ans) if "e" in ans or "E" in ans or "." in ans else int(ans)
 
-    def parse_string(self) -> str:
+    def __parse_string(self) -> str:
         ans = ""
         escaped = False
         if not self.c == '"':
             raise ValueError('expected a quote (")')
-        self.next()
+        self.__next()
         while 1:
             if self.c == "\\":
                 escaped = True
             if self.c == '"' and not escaped:
                 break
             ans += self.c
-            self.next()
+            self.__next()
             escaped = False
-        self.next()
+        self.__next()
         return ans
 
-    def parse_array(self):
+    def __parse_array(self):
         ans = []
-        if self.next() == "]":
-            self.next()
+        if self.__next() == "]":
+            self.__next()
             return []
         while 1:
-            ans.append(self.parse_value())
+            ans.append(self.__parse_value())
             if self.c == "]":
-                self.next()
+                self.__next()
                 return ans
-            if not (self.c and self.c == "," and self.next()):
+            if not (self.c and self.c == "," and self.__next()):
                 break
         raise ValueError("incorrect array")
 
-    def parse_object(self):
+    def __parse_object(self):
         ans = {}
-        if self.next() == "}":
-            self.next()
+        if self.__next() == "}":
+            self.__next()
             return {}
         while 1:
-            key = self.parse_string()
+            key = self.__parse_string()
             if self.c != ":":
                 raise ValueError("expected a colon (:)")
-            self.next()
-            ans[key] = self.parse_value()
+            self.__next()
+            ans[key] = self.__parse_value()
             if self.c == "}":
-                self.next()
+                self.__next()
                 return ans
-            if not (self.c and self.c == "," and self.next()):
+            if not (self.c and self.c == "," and self.__next()):
                 break
         raise ValueError("incorrect object")
 
-    def parse_value(self):
+    def __parse_value(self):
         if self.c == "{":
-            return self.parse_object()
+            return self.__parse_object()
         elif self.c == "[":
-            return self.parse_array()
+            return self.__parse_array()
         elif self.c == '"':
-            return self.parse_string()
+            return self.__parse_string()
         elif self.c in "ntf":
-            return self.parse_bool()
+            return self.__parse_bool()
         elif self.c == "-" or self.c.isdigit():
-            return self.parse_number()
+            return self.__parse_number()
         else:
             raise ValueError("unknown value type")
 
     def parse(self, json: str) -> Dict:
-        json = self.minify_json(json)
+        json = self.__minify_json(json)
         self.validate(json)
         self.i = 0
         self.json = json
         self.c = self.json[0]
-        ans = self.parse_value()
+        ans = self.__parse_value()
         if self.i != len(self.json):
             raise ValueError("incorrect json")
         return ans
